@@ -13,8 +13,8 @@ spec:
       "database.port": "5432"
       "database.user": "postgres"
       "database.password": "password"
-      "database.dbname": "app"
-      "table.include.list": "public.test_table"
+      "database.dbname": "appdb"
+      "schema.whitelist": "public"
       "database.server.name": "postgres"
       "plugin.name": "pgoutput"
   lifecyclePolicy: CleanUpAfterDeletion

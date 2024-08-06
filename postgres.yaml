@@ -4,9 +4,10 @@ cluster:
   postgresql:
     wal_level: logical
   superuserSecret: postgres-secret
-  bootstrap:
-    initdb:
-      database: app
-      owner: postgres
-      postInitSQL:
-        - CREATE TABLE test_table (id serial PRIMARY KEY, value text NOT NULL)
+  initdb:
+    database: appdb
+    owner: postgres
+    secret:
+      name: postgres-secret
+    postInitApplicationSQL:
+      - CREATE TABLE test_table (id serial PRIMARY KEY, value text NOT NULL)

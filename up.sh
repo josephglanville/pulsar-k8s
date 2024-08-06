@@ -30,7 +30,7 @@ kubectl apply -f postgres-secret.yaml
 helm install postgres cnpg/cluster --values postgres.yaml
 
 # Wait for PostgreSQL to become ready
-kubectl wait --for=condition=Ready clusters/postgres-cluster
+kubectl wait --for=condition=Ready clusters/postgres-cluster --timeout=300s
 
 # Create Pulsar resources
 kubectl apply -f manifests
