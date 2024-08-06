@@ -1,0 +1,36 @@
+#!/bin/bash
+
+set -euo pipefail
+
+# Add helm repos
+helm repo add kaap https://datastax.github.io/kaap
+helm repo add streamnative https://charts.streamnative.io
+helm repo add cnpg https://cloudnative-pg.github.io/charts
+
+# Setup test cluster
+kind create cluster --name pulsar --config kind.yaml
+kubectx kind-pulsar
+
+# Install kaap-stack
+helm install pulsar kaap/kaap-stack --values kaap-stack.yaml
+
+# Install pulsar-resources-operator
+helm install pulsar-resources streamnative/pulsar-resources-operator
+
+# Install PostgresSQL operator
+helm install cnpg --namespace cnpg-system --create-namespace cnpg/cloudnative-pg
+
+# Wait for Pulsar cluster to come up
+kubectl wait --for=condition=Ready pulsarclusters/pulsar --timeout=300s
+
+# Create PostgreSQL secret
+kubectl apply -f postgres-secret.yaml
+
+# Create PostgreSQL cluster
+helm install postgres cnpg/cluster --values postgres.yaml
+
+# Wait for PostgreSQL to become ready
+kubectl wait --for=condition=Ready clusters/postgres-cluster
+
+# Create Pulsar resources
+kubectl apply -f manifests

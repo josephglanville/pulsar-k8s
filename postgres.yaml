@@ -1,0 +1,12 @@
+type: postgresql
+cluster:
+  instances: 1
+  postgresql:
+    wal_level: logical
+  superuserSecret: postgres-secret
+  bootstrap:
+    initdb:
+      database: app
+      owner: postgres
+      postInitSQL:
+        - CREATE TABLE test_table (id serial PRIMARY KEY, value text NOT NULL)

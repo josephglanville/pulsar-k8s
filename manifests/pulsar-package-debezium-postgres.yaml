@@ -1,0 +1,12 @@
+apiVersion: resource.streamnative.io/v1alpha1
+kind: PulsarPackage
+metadata:
+  name: pulsar-io-debezium-postgres
+  namespace: default
+spec:
+  packageURL: source://public/default/pulsar-io-debezium-postgres@3.3.1
+  fileURL: http://dlcdn.apache.org/pulsar/pulsar-3.3.1/connectors/pulsar-io-debezium-postgres-3.3.1.nar
+  connectionRef:
+    name: pulsar
+  description: Pulsar IO Debezium PostgreSQL connector
+  lifecyclePolicy: CleanUpAfterDeletion
