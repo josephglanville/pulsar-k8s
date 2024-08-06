@@ -20,6 +20,9 @@ helm install pulsar-resources streamnative/pulsar-resources-operator
 # Install PostgresSQL operator
 helm install cnpg --namespace cnpg-system --create-namespace cnpg/cloudnative-pg
 
+# Install Debezium operator
+kubectl apply -f debezium-operator
+
 # Wait for Pulsar cluster to come up
 kubectl wait --for=condition=Ready pulsarclusters/pulsar --timeout=300s
 
@@ -34,3 +37,6 @@ kubectl wait --for=condition=Ready clusters/postgres-cluster --timeout=300s
 
 # Create Pulsar resources
 kubectl apply -f manifests
+
+# Create Debezium server deployment
+kubectl apply -f dbz.yaml
