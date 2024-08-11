@@ -51,6 +51,8 @@ kaap:
             requests:
               cpu: "0.2"
               memory: "128Mi"
+        config:
+          PULSAR_MEM: "-XX:+ExitOnOutOfMemoryError"
       autorecovery:
         replicas: 1
         resources:
@@ -86,8 +88,8 @@ kaap:
           requests:
             cpu: "0.3"
 pulsarGrafanaDashboards:
-  enabled: true
+  enabled: false
 kube-prometheus-stack:
-  enabled: true
+  enabled: false
   grafana:
     adminPassword: grafana1
