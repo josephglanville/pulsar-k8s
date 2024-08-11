@@ -6,6 +6,13 @@ kaap:
         name: pulsar
         image: apachepulsar/pulsar:3.3.1
         restartOnConfigMapChange: true
+        antiAffinity:
+          host:
+            enabled: false
+            required: false
+          zone:
+            enabled: false
+            required: false
       zookeeper:
         replicas: 1
         dataVolume:
@@ -51,6 +58,8 @@ kaap:
             requests:
               cpu: "0.2"
               memory: "128Mi"
+          config:
+            PULSAR_MEM: "-XX:+ExitOnOutOfMemoryError"
         config:
           PULSAR_MEM: "-XX:+ExitOnOutOfMemoryError"
       autorecovery:
