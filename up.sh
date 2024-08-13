@@ -20,14 +20,17 @@ helm install pulsar-resources streamnative/pulsar-resources-operator
 # Install PostgresSQL operator
 helm install cnpg --namespace cnpg-system --create-namespace cnpg/cloudnative-pg
 
-# Wait for Pulsar cluster to come up
-kubectl wait --for=condition=Ready pulsarclusters/pulsar --timeout=300s
+# Wait for CNPG operator to come up
+kubectl -n cnpg-system wait --for=condition=Available deployment/cnpg-cloudnative-pg --timeout=300s
 
 # Create PostgreSQL secret
 kubectl apply -f postgres-secret.yaml
 
 # Create PostgreSQL cluster
 helm install postgres cnpg/cluster --values postgres.yaml
+
+# Wait for Pulsar cluster to come up
+kubectl wait --for=condition=Ready pulsarclusters/pulsar --timeout=300s
 
 # Wait for PostgreSQL to become ready
 kubectl wait --for=condition=Ready clusters/postgres-cluster --timeout=300s
