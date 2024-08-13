@@ -79,6 +79,7 @@ kaap:
         replicas: 1
         runtime: kubernetes
         config:
+          secretsProviderConfiguratorClassName: org.apache.pulsar.functions.secretsproviderconfigurator.KubernetesSecretsProviderConfigurator
           functionRuntimeFactoryConfigs:
             jobNamespace: default
             percentMemoryPadding: 10

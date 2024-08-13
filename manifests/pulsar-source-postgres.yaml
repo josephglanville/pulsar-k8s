@@ -13,13 +13,17 @@ spec:
       "database.hostname": "postgres-cluster-rw"
       "database.port": "5432"
       "database.user": "postgres"
-      "database.password": "password"
+      #"database.password": "password"
       "database.dbname": "appdb"
       "database.server.name": "dbserver1"
       "plugin.name": "pgoutput"
       "schema.whitelist": "public"
       "table.whitelist": "public.users"
   lifecyclePolicy: CleanUpAfterDeletion
+  secrets:
+    "database.password":
+      key: password
+      path: postgres-secret
   name: postgres
   namespace: default
   tenant: public
