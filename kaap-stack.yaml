@@ -43,6 +43,7 @@ kaap:
           packagesManagementLedgerRootPath: /ledgers
           packagesManagementStorageProvider: org.apache.pulsar.packages.management.storage.bookkeeper.BookKeeperPackagesStorageProvider
           packagesReplicas: "1"
+          brokerDeleteInactiveTopicsEnabled: "false"
         resources:
           requests:
             cpu: "0.2"
