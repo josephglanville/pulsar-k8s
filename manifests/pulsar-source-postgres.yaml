@@ -1,0 +1,31 @@
+apiVersion: resource.streamnative.io/v1alpha1
+kind: PulsarSource
+metadata:
+  name: postgres
+spec:
+  className: org.apache.pulsar.io.debezium.postgres.DebeziumPostgresSource
+  topicName: "debezium-postgres-topic"
+  connectionRef:
+    name: pulsar
+  archive:
+    url: source://public/default/pulsar-io-debezium-postgres@3.3.1
+  configs:
+      "database.hostname": "postgres-cluster-rw"
+      "database.port": "5432"
+      "database.user": "postgres"
+      "database.password": "password"
+      "database.dbname": "appdb"
+      "database.server.name": "dbserver1"
+      "plugin.name": "pgoutput"
+      "schema.whitelist": "public"
+      "table.whitelist": "public.users"
+  lifecyclePolicy: CleanUpAfterDeletion
+  name: postgres
+  namespace: default
+  tenant: public
+  parallelism: 1
+  processingGuarantees: ATLEAST_ONCE
+  resources:
+    cpu: "0.3"
+    ram: 400000000
+    disk: 107374182
