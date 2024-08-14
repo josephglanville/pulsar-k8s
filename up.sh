@@ -23,8 +23,8 @@ helm install cnpg --namespace cnpg-system --create-namespace cnpg/cloudnative-pg
 # Wait for CNPG operator to come up
 kubectl -n cnpg-system wait --for=condition=Available deployment/cnpg-cloudnative-pg --timeout=300s
 
-# Create PostgreSQL secret
-kubectl apply -f postgres-secret.yaml
+# Create secrets
+kubectl apply -f secrets
 
 # Create PostgreSQL cluster
 helm install postgres cnpg/cluster --values postgres.yaml
