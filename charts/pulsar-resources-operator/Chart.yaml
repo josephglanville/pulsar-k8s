@@ -1,5 +1,5 @@
 apiVersion: v2
-appVersion: v0.5.3
+appVersion: v0.5.4
 description: Pulsar Resources Operator Helm chart for Pulsar Resources Management
   on Kubernetes
 icon: https://raw.githubusercontent.com/streamnative/charts/master/static/logo.svg
