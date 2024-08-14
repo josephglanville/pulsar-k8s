@@ -3,6 +3,11 @@ kind: PulsarConnection
 metadata:
   name: pulsar
 spec:
-  adminServiceURL: http://pulsar-proxy.default.svc.cluster.local:8080
-  brokerServiceURL: pulsar://pulsar-proxy.default.svc.cluster.local:6650
+  adminServiceSecureURL: https://pulsar-proxy.default.svc.cluster.local:8443
+  brokerServiceSecureURL: pulsar+ssl://pulsar-proxy.default.svc.cluster.local:6651
   clusterName: pulsar
+  authentication:
+    token:
+      secretRef:
+        name: token-superuser
+        key: superuser.jwt

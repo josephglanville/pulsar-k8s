@@ -4,7 +4,7 @@ kaap:
     spec:
       global:
         name: pulsar
-        image: apachepulsar/pulsar:3.3.1
+        image: apachepulsar/pulsar-jpg:3.3.1
         restartOnConfigMapChange: true
         antiAffinity:
           host:
@@ -13,6 +13,46 @@ kaap:
           zone:
             enabled: false
             required: false
+        auth:
+          enabled: true
+        tls:
+          enabled: true
+          zookeeper:
+            enabled: true
+            secretName: zk-tls
+          bookkeeper:
+            enabled: true
+            secretName: bk-tls
+          autorecovery:
+            enabled: true
+            secretName: autorecovery-tls
+          proxy:
+            enabled: true
+            enabledWithBroker: true
+            secretName: proxy-tls
+          broker:
+            enabled: true
+            secretName: broker-tls
+          functionsWorker:
+            enabled: true
+            enabledWithBroker: true
+            secretName: fnw-tls
+          certProvisioner:
+            selfSigned:
+              enabled: true
+              perComponent: true
+              zookeeper:
+                generate: true
+              broker:
+                generate: true
+              bookkeeper:
+                generate: true
+              autorecovery:
+                generate: true
+              proxy:
+                generate: true
+              functionsWorker:
+                generate: true
       zookeeper:
         replicas: 1
         dataVolume:
@@ -22,6 +62,10 @@ kaap:
           requests:
             cpu: "0.2"
             memory: "128Mi"
+        config:
+          ssl.protocol: TLSv1.3
+          ssl.quorum.protocol: TLSv1.3
+          ssl.enabledProtocols: TLSv1.3,TLSv1.2
       bookkeeper:
         replicas: 1
         volumes:
@@ -61,6 +105,7 @@ kaap:
               memory: "128Mi"
           config:
             PULSAR_MEM: "-XX:+ExitOnOutOfMemoryError"
+            numHttpServerThreads: "16"
         config:
           PULSAR_MEM: "-XX:+ExitOnOutOfMemoryError"
       autorecovery:
@@ -80,13 +125,14 @@ kaap:
         runtime: kubernetes
         config:
           secretsProviderConfiguratorClassName: org.apache.pulsar.functions.secretsproviderconfigurator.KubernetesSecretsProviderConfigurator
+          functionAuthProviderClassName: org.apache.pulsar.functions.auth.KubernetesSecretsTokenAuthProvider
           functionRuntimeFactoryConfigs:
             jobNamespace: default
             percentMemoryPadding: 10
-            pulsarAdminUrl: http://pulsar-function.default.svc.cluster.local:6750/
-            pulsarDockerImageName: apachepulsar/pulsar:3.3.1
+            pulsarAdminUrl: https://pulsar-proxy.default.svc.cluster.local:8443
+            pulsarDockerImageName: apachepulsar/pulsar-jpg:3.3.1
             pulsarRootDir: /pulsar
-            pulsarServiceUrl: pulsar://pulsar-broker.default.svc.cluster.local:6650/
+            pulsarServiceUrl: pulsar+ssl://pulsar-proxy.default.svc.cluster.local:6651
             submittingInsidePod: true
           numFunctionPackageReplicas: 1
           downloadDirectory: "/tmp"
@@ -98,6 +144,9 @@ kaap:
         resources:
           requests:
             cpu: "0.3"
+cert-manager:
+  enabled: true
+  installCRDs: true
 pulsarGrafanaDashboards:
   enabled: false
 kube-prometheus-stack:
