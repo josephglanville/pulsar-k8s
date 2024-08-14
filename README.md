@@ -5,6 +5,8 @@ Sets up Pulsar w/TLS and token authentication along with an example CDC connecto
 This is entirely setup using k8s operators so the entire state is declaratively managed.
 
 ## Requirements
+- docker
+- helm
 - kind
 - kubectx
 
