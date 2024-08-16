@@ -1,0 +1,72 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-endpoint-slice
+  namespace: default
+spec:
+  template:
+    spec:
+      serviceAccountName: endpoint-slice-sa
+      containers:
+      - name: endpoint-slice-creator
+        image: bash:5.1
+        env:
+        - name: ENDPOINT_IP
+          valueFrom:
+            secretKeyRef:
+              name: db-connection-ref
+              key: privateIP
+        command: ["/bin/bash"]
+        args:
+          - -c
+          - |
+            #!/bin/bash
+
+            if [ -z "$ENDPOINT_IP" ]; then
+              echo "Error: ENDPOINT_IP not found in the environment variables"
+              exit 1
+            fi
+
+            if [ -z "$ENDPOINT_SLICE_NAME" ]; then
+              echo "Error: ENDPOINT_SLICE_NAME not found in the environment variables"
+              exit 1
+            fi
+
+            if [ -z "$ENDPOINT_NAMESPACE" ]; then
+              echo "Error: ENDPOINT_NAMESPACE not found in the environment variables"
+              exit 1
+            fi
+
+            if [ -z "$ENDPOINT_PORT_NAME" ]; then
+              echo "Error: ENDPOINT_PORT_NAME not found in the environment variables"
+              exit 1
+            fi
+
+            if [ -z "$ENDPOINT_PORT" ]; then
+              echo "Error: ENDPOINT_PORT not found in the environment variables"
+              exit 1
+            fi
+
+            if [ -z "$SERVICE_NAME" ]; then
+              echo "Error: SERVICE_NAME not found in the environment variables"
+              exit 1
+            fi
+
+            # Create the EndpointSlice
+            kubectl apply -f - <<EOF
+            apiVersion: discovery.k8s.io/v1
+            kind: EndpointSlice
+            metadata:
+              name: $ENDPOINT_SLICE_NAME
+              namespace: $ENDPOINT_NAMESPACE
+              labels:
+                kubernetes.io/service-name: $SERVICE_NAME
+            endpoints:
+            - addresses:
+              - "$ENDPOINT_IP"
+              ports:
+              - name: $ENDPOINT_PORT_NAME
+                port: $ENDPOINT_PORT
+                protocol: TCP
+            EOF
+      restartPolicy: OnFailure
