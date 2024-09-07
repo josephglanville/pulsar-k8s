@@ -8,22 +8,28 @@ spec:
   connectionRef:
     name: pulsar
   archive:
-    url: source://public/default/pulsar-io-debezium-postgres@3.3.1
+    url: builtin://debezium-postgres
   configs:
+      "connector.class": "io.debezium.connector.postgresql.PostgresConnector"
       "database.hostname": "postgres-cluster-rw"
       "database.port": "5432"
       "database.user": "postgres"
-      #"database.password": "password"
+      "database.password": "password"
       "database.dbname": "appdb"
       "database.server.name": "dbserver1"
       "plugin.name": "pgoutput"
+      "topic.prefix": "dbserver1"
       "schema.whitelist": "public"
       "table.whitelist": "public.users"
+      #"key.converter": "io.confluent.connect.avro.AvroConverter"
+      #"key.converter.schema.registry.url": "https://public/default:eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJzdXBlcnVzZXIifQ.wI0fH_0fcMWs3oFCKLtrt5e8gMiAupYPeCgQQlqdlkoAC5UPs7U1QSJAbDhJ2QbCWCLatm6ddKTdCIHVZuwdFimzIAeugas8n0q0e27u4x-mx2Tcva7gD8N1DLTIcKOcxcOUYX4jFwyo7Mm3Kj_EibeAY7Vrbf01zf_hyOMCUH7jw0SZMX-AolBajZSblFvzHa9OD6NoGwZi2yJZKSWt-sw81gnUwftJaz0uQxTtIoSku_eB0m-kUvVyu5AO7c2Oy3PxyffGvRuU9IDSnzN2_bdRrvwwgyEYgVZ2v8k9DXcsolG6tKeRoYKqX3cxWn-ilTnrCJbiJwG7mMwHmh7tQA@pulsar-proxy:8081"
+      #"value.converter": "io.confluent.connect.avro.AvroConverter"
+      #"value.converter.schema.registry.url": "https://public/default:eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJzdXBlcnVzZXIifQ.wI0fH_0fcMWs3oFCKLtrt5e8gMiAupYPeCgQQlqdlkoAC5UPs7U1QSJAbDhJ2QbCWCLatm6ddKTdCIHVZuwdFimzIAeugas8n0q0e27u4x-mx2Tcva7gD8N1DLTIcKOcxcOUYX4jFwyo7Mm3Kj_EibeAY7Vrbf01zf_hyOMCUH7jw0SZMX-AolBajZSblFvzHa9OD6NoGwZi2yJZKSWt-sw81gnUwftJaz0uQxTtIoSku_eB0m-kUvVyu5AO7c2Oy3PxyffGvRuU9IDSnzN2_bdRrvwwgyEYgVZ2v8k9DXcsolG6tKeRoYKqX3cxWn-ilTnrCJbiJwG7mMwHmh7tQA@pulsar-proxy:8081"
   lifecyclePolicy: CleanUpAfterDeletion
-  secrets:
-    "database.password":
-      key: password
-      path: postgres-secret
+  #  secrets:
+  #  "database.password":
+  #    key: password
+  #    path: postgres-secret
   name: postgres
   namespace: default
   tenant: public

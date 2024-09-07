@@ -4,23 +4,19 @@ set -euo pipefail
 
 # Add helm repos
 helm repo add kaap https://datastax.github.io/kaap
-# TODO(jpg): Restore when chart is fixed
-#helm repo add streamnative https://charts.streamnative.io
+helm repo add streamnative https://charts.streamnative.io
 helm repo add cnpg https://cloudnative-pg.github.io/charts
 
 # Setup test cluster
 kind create cluster --name pulsar --config kind.yaml
 kubectx kind-pulsar
-kind load docker-image --name=pulsar docker.io/apachepulsar/pulsar-jpg:3.3.1
+#kind load docker-image --name=pulsar docker.io/apachepulsar/pulsar-jpg:3.3.1
 
 # Install kaap-stack
 helm install pulsar kaap/kaap-stack --values kaap-stack.yaml
 
 # Install pulsar-resources-operator
-# TODO(jpg): Restore when chart is fixed
-#helm install pulsar-resources streamnative/pulsar-resources-operator
-# TODO(jpg): Delete when chart is fixed
-helm install pulsar-resources ./charts/pulsar-resources-operator
+helm install pulsar-resources streamnative/pulsar-resources-operator
 
 # Install PostgresSQL operator
 helm install cnpg --namespace cnpg-system --create-namespace cnpg/cloudnative-pg

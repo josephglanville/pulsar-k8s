@@ -4,7 +4,7 @@ kaap:
     spec:
       global:
         name: pulsar
-        image: apachepulsar/pulsar-jpg:3.3.1
+        image: datastax/lunastreaming-all:3.1_4.5
         restartOnConfigMapChange: true
         antiAffinity:
           host:
@@ -79,6 +79,8 @@ kaap:
             memory: "128Mi"
       broker:
         replicas: 1
+        kafka:
+          enabled: true
         config:
           enablePackagesManagement: "true"
           managedLedgerDefaultAckQuorum: "1"
@@ -94,6 +96,8 @@ kaap:
             memory: "128Mi"
       proxy:
         replicas: 1
+        kafka:
+          enabled: true
         resources:
           requests:
             cpu: "0.2"
@@ -130,7 +134,7 @@ kaap:
             jobNamespace: default
             percentMemoryPadding: 10
             pulsarAdminUrl: https://pulsar-proxy.default.svc.cluster.local:8443
-            pulsarDockerImageName: apachepulsar/pulsar-jpg:3.3.1
+            pulsarDockerImageName: datastax/lunastreaming-all:3.1_4.5
             pulsarRootDir: /pulsar
             pulsarServiceUrl: pulsar+ssl://pulsar-proxy.default.svc.cluster.local:6651
             submittingInsidePod: true
